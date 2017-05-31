@@ -2,14 +2,10 @@ package com.qtt.wx.util;
 
 import java.io.UnsupportedEncodingException;
 
-/**
- * 用于菜单绑定url的处理
- * @author cdw
- *
- */
+//用于处理网页链接的工具类
 public class UrlUtil {
 	public static String getCode(String url){
-		String appid = "APPID";
+		String appid = "wx3978a694c607a49d";
 		try {
 			url =  java.net.URLEncoder.encode(url, "utf-8");
 		} catch (UnsupportedEncodingException e) {

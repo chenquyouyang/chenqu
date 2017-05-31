@@ -22,8 +22,7 @@ public class parseUtil {
 				// 对所有xml节点的转换都增加CDATA标记
 				boolean cdata = true;
 
-				@SuppressWarnings("unchecked")
-				public void startNode(String name, Class clazz) {
+				public void startNode(String name, @SuppressWarnings("rawtypes") Class clazz) {
 					super.startNode(name, clazz);
 				}
 				
@@ -59,7 +58,6 @@ public class parseUtil {
 		return retval;
 	}
 	
-	//xml字符串转对象
 	public static <T> T toBean(String xmlStr, Class<T> cls) {
         XStream xstream = new XStream(new DomDriver());
         xstream.processAnnotations(cls);
@@ -68,7 +66,6 @@ public class parseUtil {
         return t;
     }
 	
-	//对象转xml，并添加cdata标签
 	public static String toXml(Object obj) {
 		Wxstream.processAnnotations(obj.getClass()); // 识别obj类中的注解
         /*

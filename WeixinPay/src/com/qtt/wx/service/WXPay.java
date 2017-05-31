@@ -25,9 +25,8 @@ import com.qtt.wx.util.SSLClient;
 import com.qtt.wx.util.parseUtil;
 
 import net.sf.json.JSONObject;
-
 /**
- * 用于发起微信支付的处理类
+ * 用于微信支付的处理类
  * @author cdw
  *
  */
@@ -50,15 +49,13 @@ public class WXPay {
 		orderReq.setOut_trade_no(out_trade_no);
 		orderReq.setTotal_fee(total_fee);
 		orderReq.setSpbill_create_ip(spbill_create_ip);
-		orderReq.setNotify_url("http://www.xxxx.com/xxx/aaa.jsp");
+		orderReq.setNotify_url("http://www.XXX.com/XXX/callback.jsp");
 		orderReq.setTrade_type("JSAPI");
 		orderReq.setOpenid(openid);
-		//参与加密的参数需要字典序排序
 		String[] arr = new String[] { "appid", "mch_id", "nonce_str", "body", "detail", "attach", "out_trade_no",
 				"total_fee", "spbill_create_ip", "notify_url", "trade_type", "openid" };
 		Arrays.sort(arr);
 		StringBuffer sb = new StringBuffer();
-		//利用反射，找到参数对应的get方法获取到参数值并进行拼接
 		Class<?> c = Class.forName("qtt.wx.pojo.OrderReq");
 		for (String string : arr) {
 			sb.append(string);
@@ -77,7 +74,6 @@ public class WXPay {
 		orderReq.setSign(sign);
 		String orderReqToXml = parseUtil.toXml(orderReq);
 		System.out.println(orderReqToXml);
-		//由于xstream对特殊符号的处理导致的下划线重复，这里稍作处理
 		String replace2 = orderReqToXml.replace("__", "_");// 处理一个bug
 		System.out.println(replace2);
 		// https://api.mch.weixin.qq.com/pay/unifiedorder
@@ -130,7 +126,7 @@ public class WXPay {
 		return jsonObject.toString();
 	}
 	
-	//支付成功后，微信会往回调地址推送结果，给出正确回应，否则微信会连续推送8次
+	//回调结果处理
 	public String callBack(InputStream inputStream){
 		SAXReader reader = new SAXReader();
 		Document document = null;
@@ -145,7 +141,7 @@ public class WXPay {
 		} catch (DocumentException e) {
 			e.printStackTrace();
 		}
-		return "<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>";
+		return "ok";
 	}
 	
 	public static void main(String[] args) {

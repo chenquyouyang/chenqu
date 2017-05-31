@@ -12,6 +12,7 @@ public class CMyUtils {
 	public CMyUtils() {
 	}
 
+
 	// format:yyyy-MM-dd HH:mm:ss
 	static public Date StringToDate(String dateStr, String formatStr) {
 		DateFormat sdf = new SimpleDateFormat(formatStr);
@@ -45,7 +46,8 @@ public class CMyUtils {
 		return dateStr;
 	}
 
-	
+
+
 	static public String GetCurrentDateTime() {
 		String split_char = "";
 		String split_char2 = "";
@@ -110,6 +112,50 @@ public class CMyUtils {
 		return ret;
 	}
 
+	static public void main(String args[]) {
+		CMyUtils t = new CMyUtils();
+		
+		
+		String session_url = "http://g.10086.cn/pay/open/index?";
+		String fee_url1 = "http://g.10086.cn/pay/open/index?";
+		
+		String sessionkey = "e5283fa67596b2ac4c8e0021f4ac693b4bf2efaa";
+		String key = "1d4a322d1b212c0a2234a2963afa6043";
+		String app = "kyqn";
+		String spid = "772536";
+		int time = (int)(System.currentTimeMillis()/1000);
+		
+		
+		String session_param = "app="+app+"&method=getsessionkey&time="+time;
+		String session_md5 = t.GetMD5(session_param+"&key="+key);
+
+		System.out.println(session_url+session_param+"&hash="+session_md5+"&format=xml");
+		
+		
+		time = (int)(System.currentTimeMillis()/1000);
+		
+		String fee1_md5 = t.GetMD5("app="+app+"&method=applyforpurchase&tel=13552957942&consumecode=000082217002&time="+time+
+				"&sessionkey="+sessionkey+"&key="+key);
+		
+		//app=%s&method=%s&tel=%s&consumecode=%s&time=%s&sessionkey=%s&key=%s
+		String fee_param1 = "app="+app+"&method=applyforpurchase&tel=13552957942&spid="+spid+
+				"&serviceid=653620082218&consumecode=000082217002&salechannelid=40581000&time="+time+
+				"&sessionkey="+sessionkey+"&hash="+fee1_md5+"&format=xml";
+		
+		System.out.println(fee_url1+fee_param1);
+		
+		String orderid = "0200000f2542ec3d000bc4aa";
+		String smscode = "832736";
+		
+		time = (int)(System.currentTimeMillis()/1000);
+		String fee2_md5 = t.GetMD5("app="+app+"&method=confirmpurchase&verifycode="+smscode+"&orderid="+orderid+
+					"&time="+time+"&sessionkey="+sessionkey+"&key="+key);
+		
+		String fee_param2 = "app="+app+"&method=confirmpurchase&verifycode="+smscode+"&orderid="+orderid+"&time="+time+
+				"&sessionkey="+sessionkey+"&hash="+fee2_md5+"&format=xml";
+		
+		System.out.println(fee_url1+fee_param2);
+	}
 
 	static public String HZ2UTF8(String data)
 	{
